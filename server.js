@@ -2,11 +2,14 @@ const express = require('express');
 const multer = require('multer');
 const mongoose = require('mongoose');
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 
-mongoose.connect('votre_uri_mongodb', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const Photo = mongoose.model('Photo', new mongoose.Schema({
     filename: String,
@@ -42,4 +45,5 @@ app.get('/photos', async (req, res) => {
     }
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
